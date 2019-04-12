@@ -1312,3 +1312,24 @@ my_repl:PRIMARY> rs.addArb("192.168.2.163:18020")
 }
 ```
 
+在mongo shell中使用 rs.status()查看状态时，arbiter节点的状态显示如下：
+
+```bash
+{
+			"_id" : 3,
+			"name" : "192.168.2.163:28020",
+			"health" : 1,
+			"state" : 7,
+			"stateStr" : "ARBITER",
+			"uptime" : 27,
+			"lastHeartbeat" : ISODate("2019-04-12T01:47:39.248Z"),
+			"lastHeartbeatRecv" : ISODate("2019-04-12T01:47:38.886Z"),
+			"pingMs" : NumberLong(0),
+			"lastHeartbeatMessage" : "",
+			"syncingTo" : "",
+			"syncSourceHost" : "",
+			"syncSourceId" : -1,
+			"infoMessage" : "",
+			"configVersion" : 8
+		}
+```
