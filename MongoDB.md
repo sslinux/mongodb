@@ -1333,3 +1333,67 @@ my_repl:PRIMARY> rs.addArb("192.168.2.163:18020")
 			"configVersion" : 8
 		}
 ```
+
+`注：` 
+
+```
+添加特殊节点时：
+	1>可以在搭建过程中设置特殊节点
+	2>可以通过修改配置的方式将普通从节点设置为特殊节点
+	/*找到需要改为延迟性同步的数组号*/;
+```
+
+* (3) 配置延时节点(一般延时节点也配置成hidden)
+
+```bash
+my_repl:PRIMARY> cfg=rs.conf()
+
+...
+{
+			"_id" : 2,
+			"host" : "192.168.2.163:28019",
+			"arbiterOnly" : false,
+			"buildIndexes" : true,
+			"hidden" : false,
+			"priority" : 1,
+			"tags" : {
+				
+			},
+			"slaveDelay" : NumberLong(0),
+			"votes" : 1
+		},
+...
+```
+
+```bash
+# 设置该节点的priority为0，表示不参与选举；
+my_repl:PRIMARY> cfg.members[2].priority=0
+0
+# 设置延迟时间；
+my_repl:PRIMARY> cfg.members[2].slaveDelay=120
+120
+# 设置为隐藏节点；
+my_repl:PRIMARY> cfg.members[2].hidden=true
+true
+```
+
+* 注：这里的2是rs.conf()显示的顺序（除主库之外），非ID
+
+
+重写复制集配置：
+
+```bash
+my_repl:PRIMARY> rs.reconfig(cfg)
+{
+	"ok" : 1,
+	"operationTime" : Timestamp(1555038681, 1),
+	"$clusterTime" : {
+		"clusterTime" : Timestamp(1555038681, 1),
+		"signature" : {
+			"hash" : BinData(0,"AAAAAAAAAAAAAAAAAAAAAAAAAAA="),
+			"keyId" : NumberLong(0)
+		}
+	}
+}
+my_repl:PRIMARY> rs.status()
+```
